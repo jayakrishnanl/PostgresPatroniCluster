@@ -1,4 +1,4 @@
-# PostgreSQL High-Availability Cluster on Oracle Cloud INfrastructure (OCI) :elephant: :sparkling_heart:
+# PostgreSQL High-Availability Cluster on Oracle Cloud Infrastructure (OCI) :elephant: :sparkling_heart:
 ### PostgreSQL High-Availability Cluster (based on "Patroni" and "DCS(etcd)"). Automating deployment on OCI using Terraform.
 
 This Terraform module is designed for deploying a PostgreSQL high availability cluster on OCI enviropnment for a production environment. Terraform creates the infrastructure, builds the inventory and the other necessary variable files automatically for ansible to deploy the high available cluster.
@@ -76,7 +76,7 @@ You must use an Admin User account to launch this terraform environment. You may
 3. The tenancy used for provisoning must have service limits increased to accomodate the build. 
 4. Create or choose existing Regional Public Subnet where Bastion node and Regional Private Subnet where Postgresql nodes are to be launched.
 
-> :This module does not create the VCN/Subnets or other components to match real life requirements and you are expected to have an existing functional VCN where you already have your other resources running.
+> This module does not create the VCN/Subnets or other components to match real life requirements and you are expected to have an existing functional VCN where you already have your other resources running.
 
 Refer the link [here](https://github.com/oracle/oci-quickstart-prerequisites) for detailed instructions on setting up terraform.
 
@@ -84,12 +84,12 @@ Refer the link [here](https://github.com/oracle/oci-quickstart-prerequisites) fo
 ## How to use this module?
 1. Download or clone this repository
 ```
-git clone https://github.com/jayakrishnanl/PostgresPatroniCluster.git`
+$ git clone https://github.com/jayakrishnanl/PostgresPatroniCluster.git`
 ```
 
 2. Go to the module directory
 ```
-cd PostgresPatroniCluster>
+$ cd PostgresPatroniCluster
 ```
 
 3. Update [env-vars.sh](./env-vars.sh) with OCI Credentials. Windows uses checkout [env-vars.ps1](./env-vars.ps1) file. This file defines environment variables with credentials for your Oracle Cloud Infrastructure tenancy.

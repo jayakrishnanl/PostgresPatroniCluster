@@ -11,7 +11,7 @@ Folks who contributed with code, feedback, ideas, testing etc:
 -  Vitaliy Kukharik
 
 ### PostgreSQL High-Availability with Load Balancing - Architecture
-![PgSQL HA Cluster using HAProxy and Keepalived](.postgresql_cluster/WithHaProxyKeepalived.png)
+![PgSQL HA Cluster using HAProxy and Keepalived](./WithHaProxyKeepalived.png)
 
 This environment provides the ability to distribute the load on reading. This also allows us to scale out the cluster (with read-only replicas).
 

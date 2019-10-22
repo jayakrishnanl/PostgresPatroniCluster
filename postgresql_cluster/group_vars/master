@@ -1,0 +1,5 @@
+---
+
+is_master: 'true'
+postgresql_exists: 'false'
+#ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q opc@130.61.223.129"'

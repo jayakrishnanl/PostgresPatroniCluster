@@ -1,0 +1,76 @@
+---
+
+# Debian Ubuntu
+- block:
+    - name: "vip-manager | get vip-manager_{{ vip_manager_version }}-1_amd64.deb"
+      get_url:
+        url: "https://github.com/cybertec-postgresql/vip-manager/releases/download/v{{ vip_manager_version }}/vip-manager_{{ vip_manager_version }}-1_amd64.deb"
+        dest: /tmp/
+        timeout: 30
+        validate_certs: no
+
+    - name: vip-manager | install package
+      apt:
+        force_apt_get: yes
+        deb: "/tmp/vip-manager_{{ vip_manager_version }}-1_amd64.deb"
+        state: present
+  environment: '{{ proxy_env | default({}) }}'
+  when: ansible_os_family == "Debian"
+  tags: [ vip_manager, vip_manager_install ]
+
+# RedHat CentOS
+- block:
+    - name: "vip-manager | get vip-manager_{{ vip_manager_version }}-1_amd64.rpm"
+      get_url:
+        url: "https://github.com/cybertec-postgresql/vip-manager/releases/download/v{{ vip_manager_version }}/vip-manager_{{ vip_manager_version }}-1_amd64.rpm"
+        dest: /tmp/
+        timeout: 30
+        validate_certs: no
+
+    - name: vip-manager | install package
+      package:
+        name: "/tmp/vip-manager_{{ vip_manager_version }}-1_amd64.rpm"
+        state: present
+  environment: '{{ proxy_env | default({}) }}'
+  when: ansible_os_family == "RedHat"
+  tags: [ vip_manager, vip_manager_install ]
+
+- name: vip-manager | generate conf file "{{ vip_manager_config }}"
+  template:
+    src: templates/vip-manager.yml.j2
+    dest: "{{ vip_manager_config }}"
+    owner: postgres
+    group: postgres
+    mode: 0644
+  register: vip_manager_conf_result
+  tags: [ vip_manager, vip_manager_conf ]
+
+- name: vip-manager | generate systemd service file
+  template:
+    src: templates/vip-manager.service.j2
+    dest: /etc/systemd/system/vip-manager.service
+    owner: postgres
+    group: postgres
+    mode: 0644
+  register: vip_manager_service_result
+  tags: [ vip_manager, vip_manager_service ]
+
+- name: vip-manager | restart systemd service
+  systemd:
+    daemon_reload: yes
+    name: vip-manager
+    state: restarted
+    enabled: yes
+  register: vip_manager_restart_result
+  when: vip_manager_conf_result.changed or vip_manager_service_result.changed
+  tags: [ vip_manager, vip_manager_restart ]
+
+- name: wait for the cluster ip address (VIP) "{{ cluster_vip }}" is running
+  wait_for:
+    host: "{{ cluster_vip }}"
+    port: "{{ ansible_ssh_port }}"
+    state: started
+    timeout: 60
+    delay: 2
+  when: vip_manager_restart_result.changed
+  tags: [ vip_manager, vip_manager_restart ]

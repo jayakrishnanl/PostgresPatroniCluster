@@ -1,0 +1,39 @@
+---
+
+# Install Packages
+- name: Install | system packages
+  package:
+    name: "{{ item }}"
+  loop: "{{ system_packages }}"
+  environment: '{{ proxy_env | default({}) }}'
+  tags: install_packages
+
+# PostgreSQL prepare for install (for Debian based only)
+- block:
+    - name: Install | ensure postgresql database-cluster manager package
+      package:
+        name: postgresql-common
+        state: present
+      environment: '{{ proxy_env | default({}) }}'
+
+    - name: disable initializing of a default postgresql cluster
+      replace:
+        path: /etc/postgresql-common/createcluster.conf
+        replace: create_main_cluster = false
+        regexp: ^#?create_main_cluster.*$
+
+    - name: disable log rotation with logrotate for postgresql (use logging_collector)
+      file:
+        dest: /etc/logrotate.d/postgresql-common
+        state: absent
+  when: ansible_os_family == "Debian"
+  tags: install_postgres
+
+# Install PostgreSQL
+- name: Install | PostgreSQL packages
+  package:
+    name: "{{ item }}"
+  loop: "{{ postgresql_packages }}"
+  environment: '{{ proxy_env | default({}) }}'
+  when: postgresql_exists != "true"
+  tags: install_postgres

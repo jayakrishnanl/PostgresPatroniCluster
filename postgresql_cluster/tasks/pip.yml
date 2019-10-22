@@ -1,0 +1,21 @@
+---
+# https://pip.pypa.io/en/stable/installing/
+# Python 2.7 will reach the end of its life on January 1st, 2020. A future version of pip will drop support for Python 2.7.
+# Installing latest version pip3 for python3
+
+- block:
+    - name: pip | get-pip.py
+      get_url:
+        url: https://bootstrap.pypa.io/get-pip.py
+        dest: /tmp/
+        timeout: 30
+        validate_certs: no
+      register: get_pip_result
+
+    - name: pip | install pip
+      command: python3 get-pip.py --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+      args:
+        chdir: /tmp/
+      when: get_pip_result.changed
+  environment: '{{ proxy_env | default({}) }}'
+  tags: [ pip_install, pip ]

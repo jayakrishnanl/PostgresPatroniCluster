@@ -1,0 +1,52 @@
+---
+# Vars for Debian based distributions
+
+# PostgreSQL variables
+postgresql_cluster_name: "main"
+postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/{{ postgresql_cluster_name }}"
+postgresql_conf_dir: "/etc/postgresql/{{ postgresql_version }}/{{ postgresql_cluster_name }}"
+postgresql_bin_dir: "/usr/lib/postgresql/{{ postgresql_version }}/bin"
+postgresql_log_dir: "/var/log/postgresql"
+postgresql_unix_socket_dir: "/var/run/postgresql"
+postgresql_pgpass: /var/lib/postgresql/.pgpass
+
+postgresql_version_terse: "{{ postgresql_version | replace('.', '') }}"
+
+
+# Repository
+apt_repository_keys:
+  - key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc" # postgresql repository apt key
+apt_repository:
+  - repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main" # postgresql apt repository
+#  - repo: "deb http://deb.debian.org/debian/ {{ ansible_distribution_release }} main"                        # debian repo (optional)
+#  - repo: "deb http://deb.debian.org/debian/ {{ ansible_distribution_release }}-updates main"                # debian repo (optional)
+#  - repo: "deb http://security.debian.org/debian-security/ {{ ansible_distribution_release }}/updates main"  # debian repo (optional)
+
+
+# Packages
+system_packages:
+  - sudo
+  - vim
+  - curl
+  - less
+  - python
+  - python-dev
+  - python-psycopg2
+  - python-setuptools
+  - python3
+  - python3-dev
+  - libpq-dev
+  - gcc
+  - unzip
+  - gzip
+  - jq
+  - iptables
+  - acl
+
+postgresql_packages:
+  - postgresql-{{ postgresql_version }}
+  - postgresql-client-{{ postgresql_version }}
+  - postgresql-server-dev-{{ postgresql_version }}
+  - postgresql-contrib-{{ postgresql_version }}
+#  - postgresql-{{ postgresql_version }}-repack"
+

@@ -1,0 +1,52 @@
+---
+# Vars for RedHat based distributions
+
+# PostgreSQL variables
+postgresql_cluster_name: "data"
+postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}/{{ postgresql_cluster_name }}"
+postgresql_conf_dir: "{{ postgresql_data_dir }}"
+postgresql_bin_dir: "/usr/pgsql-{{ postgresql_version }}/bin"
+postgresql_log_dir: "/var/log/postgresql"
+postgresql_unix_socket_dir: "/var/run/postgresql"
+postgresql_pgpass: /var/lib/pgsql/.pgpass
+
+postgresql_version_terse: "{{ postgresql_version | replace('.', '') }}"
+
+
+# Repository (optional)
+yum_repository: []
+#  - name: "repo name"
+#    description: "repo description"
+#    baseurl: "https://repo.url"
+#    gpgkey: "https://key.url"
+#    gpgcheck: "yes"
+
+install_epel_repo: 'true'
+install_postgresql_repo: 'true' # postgresql repository will be installed from the package "pgdg-redhat-repo-latest.noarch.rpm" (tasks/add-repository.yml)
+
+# Packages
+system_packages:
+  - sudo
+  - vim
+  - curl
+  - less
+  - python
+  - python-devel
+  - python-psycopg2
+  - python-setuptools
+  - python36
+  - python36-devel
+  - gcc
+  - unzip
+  - gzip
+  - jq
+  - iptables
+  - acl
+
+postgresql_packages:
+  - postgresql{{ postgresql_version_terse }}
+  - postgresql{{ postgresql_version_terse }}-server
+  - postgresql{{ postgresql_version_terse }}-contrib
+  - postgresql{{ postgresql_version_terse }}-devel
+#  - pg_repack{{ postgresql_version_terse }}
+

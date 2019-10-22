@@ -1,0 +1,18 @@
+---
+# "Check system" variables
+
+os_valid_distributions:
+  - RedHat
+  - CentOS
+  - OracleLinux
+  - Ubuntu
+  - Debian
+
+os_minimum_versions:
+  RedHat: 7
+  CentOS: 7
+  OracleLinux: 7
+  Ubuntu: 16.04
+  Debian: 8
+
+# ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q opc@130.61.100.255"'
